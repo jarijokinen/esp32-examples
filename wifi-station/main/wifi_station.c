@@ -1,24 +1,26 @@
-#include "esp_event.h"
-#include "esp_log.h"
-#include "esp_system.h"
-#include "esp_wifi.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/event_groups.h"
-#include "freertos/task.h"
-#include "lwip/err.h"
-#include "lwip/sys.h"
-#include "nvs_flash.h"
+#include <esp_event.h>
+#include <esp_log.h>
+#include <esp_system.h>
+#include <esp_wifi.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/event_groups.h>
+#include <freertos/task.h>
+#include <lwip/err.h>
+#include <lwip/sys.h>
+#include <nvs_flash.h>
 
 #define WIFI_SSID ""
 #define WIFI_PSK ""
 #define WIFI_MAX_RETRIES 5
 
 static const char *TAG = "wifi";
+
 static int s_retry_num = 0;
 static EventGroupHandle_t s_wifi_event_group;
 
 static void wifi_event_handler(void *arg, esp_event_base_t event_base, 
-                               int32_t event_id, void *event_data) {
+                               int32_t event_id, void *event_data) 
+{
   switch (event_id) {
     case WIFI_EVENT_STA_START:
       /* Station started; begin the scan/connection process */
@@ -39,7 +41,8 @@ static void wifi_event_handler(void *arg, esp_event_base_t event_base,
 }
 
 static void ip_event_handler(void *arg, esp_event_base_t event_base, 
-                             int32_t event_id, void *event_data) {
+                             int32_t event_id, void *event_data)
+{
   ip_event_got_ip_t *event;
 
   switch (event_id) {
@@ -47,7 +50,7 @@ static void ip_event_handler(void *arg, esp_event_base_t event_base,
       s_retry_num = 0;
 
       /* IP address succesfully received from the DHCP server; print it out */
-      event = (ip_event_got_ip_t *) event_data;
+      event = (ip_event_got_ip_t *)event_data;
       ESP_LOGI(TAG, "Got IP: " IPSTR, IP2STR(&event->ip_info.ip));
 
       /* Set BIT0 to indicate that the connection is established */
@@ -57,7 +60,8 @@ static void ip_event_handler(void *arg, esp_event_base_t event_base,
   }
 }
 
-esp_err_t wifi_initialize_station(void) {
+esp_err_t wifi_initialize_station(void) 
+{
   /* Create an event group to indicate if we are connected or not */
   s_wifi_event_group = xEventGroupCreate();
   

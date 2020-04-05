@@ -1,8 +1,8 @@
-#ifndef HTTPD_WIFI_H
-#define HTTPD_WIFI_H
+#ifndef HTTP_SERVER_WIFI_H
+#define HTTP_SERVER_WIFI_H
 
-#include "esp_netif.h"
-#include "esp_system.h"
+#include <esp_netif.h>
+#include <esp_system.h>
 
 esp_err_t wifi_connect(void);
 esp_err_t wifi_disconnect(void);
